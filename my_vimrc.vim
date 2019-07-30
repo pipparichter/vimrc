@@ -20,6 +20,8 @@ call plug#begin('~/.vim/plugged')
 
 " Plugins from GitHub repos --------------------------------------------
 
+" Easily run Python and C++ files
+Plug 'pipparichter/vim-autorun'
 " Preview MarkDown text in a browser
 Plug 'suan/vim-instant-markdown', {'for':'markdown'}
 " Override configs by directory 
@@ -119,14 +121,23 @@ syntax on
 " Show line numbers
 set nu
 
-" Latex mappings for creating bold/italicized/underlined text, as well as
-" other shortcuts for markdown files
+" Automatic text (soft) wrapping without splitting words
+set wrap
+set nolist
+set linebreak
+
+" Latex mappings for creating bold/italicized/underlined text and easy moving, 
+" as well as other shortcuts for markdown files
 augroup conditional_mappings
     " Make sure the autocommands aren't loaded twice by removing all loaded
     " autocommands in this group. This is needed because, each time the .vimrc
     " is called, it merges augroups (it doesn't replace them); if this command
     " is not included, autocmds in the group will be included twice.
     autocmd!
+    
+    " Allow up and down movement by lines on screen
+    autocmd FileType tex imap <Down> <Esc>gj<Insert>
+    autocmd FileType tex imap <Up> <Esc>gk<Insert>
     
     autocmd FileType tex imap <C-X> \textit{}<Left>
     autocmd FileType tex imap <C-Y> \textbf{}<Left>
@@ -242,3 +253,10 @@ let g:NERDCompactSexyComs = 1
 " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDDefaultAlign = 'left'
 
+
+
+" Additional commands ===========================================================
+
+
+" A command for quickly echoing the number of words in the current buffer
+command WordCount echo wordcount()['words']
